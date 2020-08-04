@@ -33,7 +33,6 @@ jobs:
 
       # Deploy to AWS
       - name: Deploy to AWS ElasticBeanstalk
-        if: success()
         uses: einaregilsson/beanstalk-deploy@v10
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
