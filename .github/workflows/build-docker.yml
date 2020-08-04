@@ -35,7 +35,7 @@ jobs:
       - name: Install Dependencies & Deploy to AWS
         run: |
           sudo npm install -g beanstalk-deploy --unsafe-perm
-          sudo AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID}} AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY}} beanstalk-deploy "docker-react" "DockerReact-env" "docker-react-${{ steps.format-time.outputs.replaced }}" "us-east-2" deploy.zip
+          sudo AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID}} AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY}} beanstalk-deploy "docker-react" "DockerReact-env-1" "docker-react-${{ steps.format-time.outputs.replaced }}" "us-east-2" deploy.zip
       # # Deploy to AWS
       # This doesn't work, complains not enough arguments and IS_GITHUB_ACTION evaluates to false
       # - name: Deploy to AWS ElasticBeanstalk
