@@ -14,4 +14,4 @@ RUN rm -rf /usr/share/nginx/html/*
 
 EXPOSE 80
 
-COPY --from=builder /app/build /user/share/nginx/html
+COPY --from=builder /app/build /usr/share/nginx/html
