@@ -31,11 +31,16 @@ jobs:
           replace-with: "-"
           flags: "g"
 
-      - name: Install dependencies & Build Presentation
+      - name: Install dependencies & Deploy to AWS
         run: |
           sudo npm install -g beanstalk-deploy --unsafe-perm
-          sudo AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID}} AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY}} beanstalk-deploy "docker-react" "DockerReact-env" "docker-react-${{ steps.format-time.outputs.replaced }}" "us-east-2" deploy.zip
+          sudo beanstalk-deploy "docker-react" "DockerReact-env" "docker-react-${{ steps.format-time.outputs.replaced }}" "us-east-2" deploy.zip
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #
       # # Deploy to AWS
+      # This doesn't work, complains not enough arguments and IS_GITHUB_ACTION evaluates to false
       # - name: Deploy to AWS ElasticBeanstalk
       #   uses: einaregilsson/beanstalk-deploy@v10
       #   with:
