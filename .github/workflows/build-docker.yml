@@ -15,14 +15,14 @@ jobs:
         run: docker run -e CI=true jackmckew/docker-react-dev npm run test -- --coverage
 
       # Zip Dockerfile for upload
-      - name: Generate deployment package
+      - name: Generate Deployment Package
         run: zip -r deploy.zip * -x "**node_modules**"
 
-      - name: Get timestamp
+      - name: Get Timestamp
         uses: gerred/actions/current-time@master
         id: current-time
 
-      - name: Run string replace
+      - name: Run String Replace
         uses: frabert/replace-string-action@master
         id: format-time
         with:
@@ -31,14 +31,11 @@ jobs:
           replace-with: "-"
           flags: "g"
 
-      - name: Install dependencies & Deploy to AWS
+      # Deploy to AWS
+      - name: Install Dependencies & Deploy to AWS
         run: |
           sudo npm install -g beanstalk-deploy --unsafe-perm
-          sudo beanstalk-deploy "docker-react" "DockerReact-env" "docker-react-${{ steps.format-time.outputs.replaced }}" "us-east-2" deploy.zip
-        with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #
+          sudo AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID}} AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY}} beanstalk-deploy "docker-react" "DockerReact-env" "docker-react-${{ steps.format-time.outputs.replaced }}" "us-east-2" deploy.zip
       # # Deploy to AWS
       # This doesn't work, complains not enough arguments and IS_GITHUB_ACTION evaluates to false
       # - name: Deploy to AWS ElasticBeanstalk
