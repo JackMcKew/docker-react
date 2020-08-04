@@ -1,4 +1,4 @@
-name: Build Docker Image
+name: Run Test Suite
 on: push
 
 jobs:
@@ -11,5 +11,3 @@ jobs:
         run: docker build -t jackmckew/docker-react -f Dockerfile.dev .
       - name: Run test suite
         run: docker run -e CI=true jackmckew/docker-react npm run test -- --coverage
-    # script:
-    #   - docker run -e CI=true USERNAME/docker-react npm run test
