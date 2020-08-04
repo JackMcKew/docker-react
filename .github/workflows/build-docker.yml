@@ -5,7 +5,9 @@ jobs:
   build-docker:
     runs-on: ubuntu-latest
     steps:
-      - name: Clone repo
+      - name: Checkout latest repo
         uses: actions/checkout@master
       - name: Build Dev Docker Image
-        run: docker build -f Dockerfile.dev .
+        run: docker build -t jackmckew/docker-react -f Dockerfile.dev .
+      - name: Run test suite
+        run: docker -e CI=true jackmckew/docker-react npm run test
