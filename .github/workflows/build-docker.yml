@@ -1,0 +1,11 @@
+name: Build Docker Image
+on: push
+
+jobs:
+  build-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@master
+      - name: Build Dev Docker Image
+        run: docker build -f Dockerfile.dev .
