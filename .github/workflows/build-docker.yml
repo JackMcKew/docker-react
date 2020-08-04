@@ -9,14 +9,12 @@ jobs:
         uses: actions/checkout@master
 
       - name: Build Dev Docker Image
-        run: docker build -t jackmckew/docker-react -f Dockerfile.dev .
+        run: docker build -t jackmckew/docker-react-dev -f Dockerfile.dev .
 
       - name: Run Test Suite
-        run: docker run -e CI=true jackmckew/docker-react npm run test -- --coverage
+        run: docker run -e CI=true jackmckew/docker-react-dev npm run test -- --coverage
 
-      - name: Generate Deployment Package
-        run: zip deploy.zip build
-
+      # Deploy to AWS
       - name: Deploy to AWS ElasticBeanstalk
         if: success()
         uses: einaregilsson/beanstalk-deploy@v10
@@ -27,4 +25,4 @@ jobs:
           environment_name: DockerReact-env
           version_label: 0.1.0
           region: us-east-2
-          deployment_package: deploy.zip
+          deployment_package: Dockerfile
