@@ -15,7 +15,7 @@ jobs:
         run: docker run -e CI=true jackmckew/docker-react npm run test -- --coverage
 
       - name: Generate Deployment Package
-        run: zip deploy.zip *.js *.json *.html *.css
+        run: zip deploy.zip build
 
       - name: Deploy to AWS ElasticBeanstalk
         if: success()
