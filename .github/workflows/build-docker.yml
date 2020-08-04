@@ -31,15 +31,19 @@ jobs:
           replace-with: "-"
           flags: "g"
 
-      # Deploy to AWS
-      - name: Deploy to AWS ElasticBeanstalk
-        uses: einaregilsson/beanstalk-deploy@v10
-        with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: "docker-react"
-          environment_name: "DockerReact-env"
-          version_label: "docker-react-${{ steps.format-time.outputs.replaced }}"
-          region: "us-east-2"
-          deployment_package: deploy.zip
-          version_description: ${{github.SHA}}
+      - name: Install dependencies & Build Presentation
+        run: |
+          sudo npm install -g beanstalk-deploy --unsafe-perm
+          sudo AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID}} AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY}} beanstalk-deploy "docker-react" "DockerReact-env" "docker-react-${{ steps.format-time.outputs.replaced }}" "us-east-2" deploy.zip
+      # # Deploy to AWS
+      # - name: Deploy to AWS ElasticBeanstalk
+      #   uses: einaregilsson/beanstalk-deploy@v10
+      #   with:
+      #     aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     application_name: "docker-react"
+      #     environment_name: "DockerReact-env"
+      #     version_label: "docker-react-${{ steps.format-time.outputs.replaced }}"
+      #     region: "us-east-2"
+      #     deployment_package: deploy.zip
+      #     version_description: ${{github.SHA}}
