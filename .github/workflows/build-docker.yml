@@ -14,6 +14,23 @@ jobs:
       - name: Run Test Suite
         run: docker run -e CI=true jackmckew/docker-react-dev npm run test -- --coverage
 
+      # Zip Dockerfile for upload
+      - name: Generate deployment package
+        run: zip -r deploy.zip Dockerfile
+
+      - name: Get timestamp
+        uses: gerred/actions/current-time@master
+        id: current-time
+
+      - name: Run string replace
+        uses: frabert/replace-string-action@master
+        id: format-time
+        with:
+          pattern: '[:\.]+'
+          string: "${{ steps.current-time.outputs.time }}"
+          replace-with: "-"
+          flags: "g"
+
       # Deploy to AWS
       - name: Deploy to AWS ElasticBeanstalk
         if: success()
@@ -23,6 +40,6 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: docker-react
           environment_name: DockerReact-env
-          version_label: 1
           region: us-east-2
-          deployment_package: Dockerfile
+          version_label: "my-app-${{ steps.format-time.outputs.replaced }}"
+          deployment_package: deploy.zip
